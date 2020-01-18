@@ -3,7 +3,7 @@ package com.hemraj.hackernews.hackernews
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hemraj.hackernews.domain.HackerNewsRepository
-import com.hemraj.hackernews.presentation.HackerNewsViewModel
+import com.hemraj.hackernews.presentation.home.HackerNewsViewModel
 
 
 class HackerNewsViewModelFactory(private val repository: HackerNewsRepository) :
