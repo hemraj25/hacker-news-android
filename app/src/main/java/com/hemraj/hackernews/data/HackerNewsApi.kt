@@ -2,8 +2,7 @@ package com.hemraj.hackernews.data
 
 import com.hemraj.hackernews.domain.HackerNews
 
-
-open class HackerNewsApi(
+class HackerNewsApi(
     val exhaustiveNbHits: Boolean,
     val hits: List<Hit>,
     val hitsPerPage: Int,
@@ -17,7 +16,14 @@ open class HackerNewsApi(
     fun toDomain(): List<HackerNews> {
         val hackerNewsList = mutableListOf<HackerNews>()
         hits.forEach {
-            hackerNewsList.add(HackerNews(it.title, it.url))
+            hackerNewsList.add(
+                HackerNews(
+                    it.title ?: "Title",
+                    it.story_text ?: "",
+                    it.author ?: "",
+                    it.url ?: ""
+                )
+            )
         }
         return hackerNewsList
     }
@@ -27,7 +33,7 @@ open class HackerNewsApi(
 data class Hit(
     val _highlightResult: HighlightResult,
     val _tags: List<String>,
-    val author: String,
+    val author: String?,
     val comment_text: Any,
     val created_at: String,
     val created_at_i: Int,
@@ -37,11 +43,11 @@ data class Hit(
     val points: Int,
     val relevancy_score: Int,
     val story_id: Any,
-    val story_text: Any,
-    val story_title: Any,
+    val story_text: String?,
+    val story_title: String?,
     val story_url: Any,
-    val title: String,
-    val url: String
+    val title: String?,
+    val url: String?
 )
 
 data class HighlightResult(
