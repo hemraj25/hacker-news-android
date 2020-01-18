@@ -2,19 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".presentation.HackerNewsHomeActivity">
+    tools:context=".presentation.home.HackerNewsHomeActivity">
 
-    <EditText
-        android:id="@+id/searchEt"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Type to search" />
+        android:background="@color/white"
+        android:text="@string/hacker_news"
+        android:textStyle="bold"
+        android:fontFamily="cursive"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:padding="16dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvHackerNews"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:layout_height="0.5dp"
+        android:background="@color/divider"/>
+
+    <include
+        layout="@layout/address_search_container"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHackerNews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/typingAnimationView"
+            android:layout_width="250dp"
+            android:layout_height="210dp"
+            android:layout_marginTop="80dp"
+            android:layout_gravity="center_horizontal"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="smoothymon_typing.json"
+            app:lottie_loop="true" />
+    </FrameLayout>
+
 </LinearLayout>

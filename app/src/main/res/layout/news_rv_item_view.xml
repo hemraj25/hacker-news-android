@@ -1,7 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/textView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="10dp"
-          android:padding="10dp"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:background="?attr/selectableItemBackground"
+    android:paddingStart="14dp"
+    android:paddingEnd="14dp"
+    android:paddingTop="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/storyTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/gunmetal"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="Gedung Mensa. Jl. H.R. Rasuna Said Kav. 34-35…. " />
+
+    <TextView
+        android:id="@+id/storyTextTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        tools:text="1st floor, 7th Cross, Near Apollo Pharmacy" />
+
+    <TextView
+        android:id="@+id/storyAuthorTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/mix_orange"
+        android:textSize="12sp"
+        tools:text="Mohit" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#f0f0f0" />
+
+</LinearLayout>
