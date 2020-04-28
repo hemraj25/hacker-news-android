@@ -72,7 +72,15 @@ dependencies {
     //Lib for animation
     implementation "com.airbnb.android:lottie:${versions.lottie}"
 
+    //Koin Dependency injection lib
+    implementation "org.koin:koin-androidx-viewmodel:${versions.koin_version}"
+    implementation "org.koin:koin-core:${versions.koin_version}"
 
+
+    testImplementation "org.mockito:mockito-core:${versions.mockito}"
+    testImplementation "android.arch.core:core-testing:${versions.coreTesting}"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.nhaarmanMockito}"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
