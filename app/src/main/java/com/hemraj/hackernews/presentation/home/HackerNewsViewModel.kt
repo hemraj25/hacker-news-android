@@ -3,17 +3,21 @@ package com.hemraj.hackernews.presentation.home
 import android.util.Log
 import androidx.lifecycle.*
 import com.hemraj.hackernews.Result
+import com.hemraj.hackernews.data.HackerNewsDataRepository
 import com.hemraj.hackernews.domain.HackerNews
-import com.hemraj.hackernews.domain.HackerNewsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 
-class HackerNewsViewModel(private val repository: HackerNewsRepository): ViewModel() {
+class HackerNewsViewModel(private val repository: HackerNewsDataRepository): ViewModel() {
 
     private val TAG = HackerNewsViewModel::class.java.canonicalName
 
-    var searchQuery = MutableLiveData<String>()
+    private var searchQuery = MutableLiveData<String>()
+
+    fun getSearchResult(query: String) {
+        searchQuery.value = query
+    }
 
     val searchResultLiveData: LiveData<Result<List<HackerNews>>> = searchQuery.switchMap {
         liveData(Dispatchers.IO) {

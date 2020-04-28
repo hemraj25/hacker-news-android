@@ -2,30 +2,22 @@ package com.hemraj.hackernews.presentation.home
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hemraj.hackernews.Injection
 import com.hemraj.hackernews.R
 import com.hemraj.hackernews.Result
-import com.hemraj.hackernews.hackernews.HackerNewsViewModelFactory
 import com.hemraj.hackernews.presentation.util.*
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.address_search_container.*
+import org.koin.android.ext.android.inject
 
 class HackerNewsHomeActivity : AppCompatActivity() {
 
     private val TAG = HackerNewsHomeActivity::class.java.canonicalName
 
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            HackerNewsViewModelFactory(Injection.provideHackerNewsRepo())
-        ).get(HackerNewsViewModel::class.java)
-    }
+    private val viewModel by inject<HackerNewsViewModel>()
 
     private val hackerNewsAdaptor = HackerNewsAdaptor {
         it?.url?.let { url ->
@@ -55,7 +47,7 @@ class HackerNewsHomeActivity : AppCompatActivity() {
     private fun initView() {
         searchEt.afterTextChange {
             if (it.length > 2) {
-                viewModel.searchQuery.value = it
+                viewModel.getSearchResult(it)
                 typingAnimationView.stopAnimation()
             } else {
                 hackerNewsAdaptor.clearData()
@@ -69,6 +61,7 @@ class HackerNewsHomeActivity : AppCompatActivity() {
             when (it.status) {
 
                 Result.LOADING -> {
+                    //No op
                 }
 
                 Result.SUCCESS -> {
@@ -79,6 +72,7 @@ class HackerNewsHomeActivity : AppCompatActivity() {
                 }
 
                 Result.ERROR -> {
+                    // NO Op
                 }
 
             }
