@@ -8,14 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hemraj.hackernews.R
 import com.hemraj.hackernews.Result
+import com.hemraj.hackernews.databinding.ActivityHomeBinding
 import com.hemraj.hackernews.presentation.util.*
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.address_search_container.*
 import org.koin.android.ext.android.inject
 
 class HackerNewsHomeActivity : AppCompatActivity() {
 
-    private val TAG = HackerNewsHomeActivity::class.java.canonicalName
+    private val TAG = "HackerNewsHomeActivity"
+
+    lateinit var binding: ActivityHomeBinding
 
     private val viewModel by inject<HackerNewsViewModel>()
 
@@ -31,7 +32,8 @@ class HackerNewsHomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initToolbar()
         initViewModel()
         initView()
@@ -45,13 +47,13 @@ class HackerNewsHomeActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        searchEt.afterTextChange {
+        binding.searchView.searchEt.afterTextChange {
             if (it.length > 2) {
                 viewModel.getSearchResult(it)
-                typingAnimationView.stopAnimation()
+                binding.typingAnimationView.stopAnimation()
             } else {
                 hackerNewsAdaptor.clearData()
-                typingAnimationView.startAnimation()
+                binding.typingAnimationView.startAnimation()
             }
         }
     }
@@ -80,7 +82,7 @@ class HackerNewsHomeActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        rvHackerNews.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        rvHackerNews.adapter = hackerNewsAdaptor
+        binding.rvHackerNews.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        binding.rvHackerNews.adapter = hackerNewsAdaptor
     }
 }

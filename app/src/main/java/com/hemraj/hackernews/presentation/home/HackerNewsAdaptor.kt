@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hemraj.hackernews.R
+import com.hemraj.hackernews.databinding.NewsRvItemViewBinding
 import com.hemraj.hackernews.domain.HackerNews
-import kotlinx.android.synthetic.main.news_rv_item_view.view.*
 
 
 class HackerNewsAdaptor(private val onItemClickListener: (HackerNews?) -> Unit) :
@@ -15,12 +15,10 @@ class HackerNewsAdaptor(private val onItemClickListener: (HackerNews?) -> Unit) 
 
     private var hackerNewsList: List<HackerNews>? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        NewsViewHolder(
-            LayoutInflater.from(
-                parent.context
-            ).inflate(R.layout.news_rv_item_view, parent, false)
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
+        val binding = NewsRvItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return NewsViewHolder(binding)
+    }
 
     override fun getItemCount(): Int {
         Log.d("HackerNewsAdaptor", "getItemCount = ${hackerNewsList?.size}")
@@ -47,15 +45,17 @@ class HackerNewsAdaptor(private val onItemClickListener: (HackerNews?) -> Unit) 
     }
 
 
-    class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+    class NewsViewHolder(private val binding: NewsRvItemViewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bindData(hackerNews: HackerNews?) {
-            itemView.storyTitleTv.text = hackerNews?.title
-            itemView.storyAuthorTv.text = hackerNews?.author
-            itemView.storyTextTv.text = if (hackerNews?.storyText!!.isNotEmpty()) {
-                hackerNews.storyText
-            } else {
-                itemView.context.getString(R.string.no_story_available)
+            binding.apply {
+                storyTitleTv.text = hackerNews?.title
+                storyAuthorTv.text = hackerNews?.author
+                storyTextTv.text = if (hackerNews?.storyText.isNullOrEmpty().not()) {
+                    hackerNews!!.storyText
+                } else {
+                    itemView.context.getString(R.string.no_story_available)
+                }
             }
         }
     }
