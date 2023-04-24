@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Change the severity of hardcoded strings to "error" -->
+    <issue id="HardcodedText" severity="error" />
+    <!-- Ignore lint errors for generated code -->
+    <issue id="all">
+        <ignore path="**/build/**" />
+    </issue>
+</lint>

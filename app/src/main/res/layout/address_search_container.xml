@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/address_search_container"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:background="@drawable/bg_search_container"
@@ -11,6 +10,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/home_screen_title"
         android:src="@drawable/ic_search" />
 
     <EditText
@@ -26,12 +26,14 @@
         android:inputType="text"
         android:maxLines="1"
         android:textColor="@color/gunmetal"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:importantForAutofill="no" />
 
     <ImageView
         android:id="@+id/clearSearchIv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:contentDescription="@string/clear_search_text"
         android:layout_gravity="center_horizontal"
         android:padding="4dp"
         android:src="@drawable/ic_cross"

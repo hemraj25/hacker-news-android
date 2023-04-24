@@ -4,7 +4,7 @@ object Versions {
     const val GoogleMaterial = "1.8.0"
     const val CoreKtx = "1.9.0"
     const val AppCompat = "1.6.1"
-    const val Jacoco = "0.8.8"
+    const val Jacoco = "0.8.9"
     const val Gson = "2.10.1"
     const val Coroutine = "1.6.4"
     //https://developer.android.com/jetpack/androidx/releases/recyclerview

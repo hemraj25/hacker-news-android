@@ -1,7 +1,6 @@
 package com.hemraj.hackernews.presentation.home
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hemraj.hackernews.R
 import com.hemraj.hackernews.Result
 import com.hemraj.hackernews.databinding.ActivityHomeBinding
-import com.hemraj.hackernews.presentation.util.*
+import com.hemraj.hackernews.presentation.WebViewActivity
+import com.hemraj.hackernews.util.*
 import org.koin.android.ext.android.inject
 
 class HackerNewsHomeActivity : AppCompatActivity() {
@@ -20,7 +20,7 @@ class HackerNewsHomeActivity : AppCompatActivity() {
 
     private val viewModel by inject<HackerNewsViewModel>()
 
-    private val hackerNewsAdaptor = HackerNewsAdaptor {
+    private val hackerNewsAdapter = HackerNewsAdapter {
         it?.url?.let { url ->
             if (url.isValidUrl()) {
                 startActivity(WebViewActivity.createIntent(this, url))
@@ -42,7 +42,7 @@ class HackerNewsHomeActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         supportActionBar?.apply {
-            title = getString(R.string.home_screen_tiltle)
+            title = getString(R.string.home_screen_title)
         }
     }
 
@@ -52,7 +52,7 @@ class HackerNewsHomeActivity : AppCompatActivity() {
                 viewModel.getSearchResult(it)
                 binding.typingAnimationView.stopAnimation()
             } else {
-                hackerNewsAdaptor.clearData()
+                hackerNewsAdapter.clearData()
                 binding.typingAnimationView.startAnimation()
             }
         }
@@ -68,8 +68,8 @@ class HackerNewsHomeActivity : AppCompatActivity() {
 
                 Result.SUCCESS -> {
                     it.data?.let { newsList ->
-                        Log.d(TAG, "Success: itemCount-> ${newsList.size}")
-                        hackerNewsAdaptor.setData(newsList)
+                        log(TAG, "Success: itemCount-> ${newsList.size}")
+                        hackerNewsAdapter.setData(newsList)
                     }
                 }
 
@@ -83,6 +83,6 @@ class HackerNewsHomeActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         binding.rvHackerNews.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        binding.rvHackerNews.adapter = hackerNewsAdaptor
+        binding.rvHackerNews.adapter = hackerNewsAdapter
     }
 }

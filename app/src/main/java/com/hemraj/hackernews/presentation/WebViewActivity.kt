@@ -1,4 +1,4 @@
-package com.hemraj.hackernews.presentation.util
+package com.hemraj.hackernews.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.webkit.*
 import com.hemraj.hackernews.databinding.ActivityWebViewBinding
+import com.hemraj.hackernews.util.startAnimation
+import com.hemraj.hackernews.util.stopAnimation
 
 class WebViewActivity : AppCompatActivity() {
 

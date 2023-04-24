@@ -1,17 +1,16 @@
 package com.hemraj.hackernews.presentation.home
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hemraj.hackernews.R
 import com.hemraj.hackernews.databinding.NewsRvItemViewBinding
 import com.hemraj.hackernews.domain.HackerNews
+import com.hemraj.hackernews.util.log
 
 
-class HackerNewsAdaptor(private val onItemClickListener: (HackerNews?) -> Unit) :
-    RecyclerView.Adapter<HackerNewsAdaptor.NewsViewHolder>() {
+class HackerNewsAdapter(private val onItemClickListener: (HackerNews?) -> Unit) :
+    RecyclerView.Adapter<HackerNewsAdapter.NewsViewHolder>() {
 
     private var hackerNewsList: List<HackerNews>? = null
 
@@ -21,12 +20,12 @@ class HackerNewsAdaptor(private val onItemClickListener: (HackerNews?) -> Unit) 
     }
 
     override fun getItemCount(): Int {
-        Log.d("HackerNewsAdaptor", "getItemCount = ${hackerNewsList?.size}")
+        log("HackerNewsAdapter", "getItemCount = ${hackerNewsList?.size}")
         return hackerNewsList?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        Log.d("HackerNewsAdaptor", "bind")
+        log("HackerNewsAdapter", "bind")
         holder.bindData(hackerNewsList?.get(position))
         holder.itemView.setOnClickListener {
             onItemClickListener.invoke(hackerNewsList?.get(position))
@@ -35,7 +34,7 @@ class HackerNewsAdaptor(private val onItemClickListener: (HackerNews?) -> Unit) 
 
     fun setData(newsList: List<HackerNews>) {
         hackerNewsList = newsList
-        Log.d("HackerNewsAdaptor", "list size ${hackerNewsList?.size}")
+        log("HackerNewsAdapter", "list size ${hackerNewsList?.size}")
         notifyDataSetChanged()
     }
 

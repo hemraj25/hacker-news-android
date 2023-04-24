@@ -3,6 +3,14 @@ plugins {
     id("kotlin-android")
 }
 
+apply {
+    from("$rootDir/codeAnalysis.gradle")
+}
+
+apply {
+    from("$rootDir/jacoco.gradle")
+}
+
 android {
     namespace = "com.hemraj.hackernews"
     compileSdk = Config.compileSdk

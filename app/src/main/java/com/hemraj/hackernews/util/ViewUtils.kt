@@ -1,4 +1,4 @@
-package com.hemraj.hackernews.presentation.util
+package com.hemraj.hackernews.util
 
 import android.text.Editable
 import android.text.TextWatcher

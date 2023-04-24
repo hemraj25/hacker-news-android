@@ -27,7 +27,7 @@
 
         <activity
             android:exported="false"
-            android:name=".presentation.util.WebViewActivity" />
+            android:name=".presentation.WebViewActivity" />
     </application>
 
 </manifest>
