@@ -1,15 +1,16 @@
 package com.hemraj.hackernews.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.hemraj.hackernews.Result
 import com.hemraj.hackernews.data.HackerNewsDataRepository
 import com.hemraj.hackernews.domain.HackerNews
-import kotlinx.coroutines.Dispatchers
+import com.hemraj.hackernews.util.AppDispatchers
+import com.hemraj.hackernews.util.log
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 
-class HackerNewsViewModel(private val repository: HackerNewsDataRepository): ViewModel() {
+class HackerNewsViewModel(
+    private val appDispatchers: AppDispatchers,
+    private val repository: HackerNewsDataRepository): ViewModel() {
 
     private val TAG = HackerNewsViewModel::class.java.canonicalName
 
@@ -20,17 +21,17 @@ class HackerNewsViewModel(private val repository: HackerNewsDataRepository): Vie
     }
 
     val searchResultLiveData: LiveData<Result<List<HackerNews>>> = searchQuery.switchMap {
-        liveData(Dispatchers.IO) {
+        liveData(appDispatchers.IO) {
             try {
                 emit(Result.loading())
                 delay(1000)
-                Log.d(TAG, "Search Query: ${searchQuery.value}")
+                log(TAG, "Search Query: ${searchQuery.value}")
                 repository.getSearchNewsList(it).collect {
                     emit(it)
                 }
             } catch (ioException: Exception) {
                 emit(Result.error(ioException))
-                Log.d("Error", ioException.message?:"")
+                log("Error", ioException.message?:"")
             }
         }
     }

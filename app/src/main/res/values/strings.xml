@@ -3,5 +3,6 @@
     <string name="search">Type something to search</string>
     <string name="no_story_available">No story text available</string>
     <string name="hacker_news">Hacker News</string>
-    <string name="home_screen_tiltle">Hacker News</string>
+    <string name="home_screen_title">Search For Hacker News</string>
+    <string name="clear_search_text">Clear search text</string>
 </resources>

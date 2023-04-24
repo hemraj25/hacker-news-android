@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder
 import com.hemraj.hackernews.data.HackerNewsDataRepository
 import com.hemraj.hackernews.data.network.NewsNetworkApi
 import com.hemraj.hackernews.presentation.home.HackerNewsViewModel
+import com.hemraj.hackernews.util.AppDispatchers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 const val BASE_URL = "https://hn.algolia.com/api/"
 
 val networkModule = module {
+    factory { provideDispatcher() }
     factory { provideGson() }
     factory { provideAuthInterceptor() }
     factory { provideOkhttpLoggingInterceptor() }
@@ -31,7 +33,7 @@ val hackerNewsRepositoryModule = module {
 
 val hackerNewsViewModel =  module {
     viewModel {
-        HackerNewsViewModel(get())
+        HackerNewsViewModel(get(), get())
     }
 }
 
@@ -40,6 +42,8 @@ fun provideGson(): Gson {
     gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
     return gsonBuilder.create()
 }
+
+fun provideDispatcher() = AppDispatchers
 
 fun provideOkhttpLoggingInterceptor(): HttpLoggingInterceptor {
     return HttpLoggingInterceptor().apply {

@@ -1,61 +1,83 @@
 package com.hemraj.hackernews.data
 
+import MainCoroutineRule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.hemraj.hackernews.Result
 import com.hemraj.hackernews.data.network.NewsNetworkApi
 import com.hemraj.hackernews.domain.HackerNews
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import getSearchResult
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Answers
-import org.mockito.MockitoAnnotations
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import retrofit2.Response
+import java.io.IOException
 
+@RunWith(JUnit4::class)
+@ExperimentalCoroutinesApi
 class HackerNewsDataRepositoryTest {
 
-    @Rule
-    @JvmField
-    val rule2 = InstantTaskExecutorRule()
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     private lateinit var repository: HackerNewsDataRepository
 
-    private val networkApi = mock<NewsNetworkApi>(defaultAnswer = Answers.RETURNS_DEEP_STUBS)
+    @MockK
+    lateinit var networkApi: NewsNetworkApi
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        MockKAnnotations.init(this, relaxUnitFun = true)
         repository = HackerNewsDataRepository(networkApi)
     }
 
     @Test
-    fun getSearchNewsListSuccess() = runBlocking {
-        val retroResponseMock = mock<Response<HackerNewsApi>>()
-        whenever(networkApi.getSearchResult(any()).execute()).thenReturn(retroResponseMock)
+    fun getSearchNewsListSuccess() = mainCoroutineRule.runTest {
+        val retroResponseMock = mockk<Response<HackerNewsApi>>()
+        every {  networkApi.getSearchResult(any()).execute() } returns retroResponseMock
         val response = networkApi.getSearchResult("sports").execute()
-        whenever(response.isSuccessful).thenReturn(true)
-        whenever(response.body()).thenReturn(getSearchResult())
+        every { response.isSuccessful } returns true
+        every { response.body() } returns getSearchResult()
         val flow: Flow<Result<List<HackerNews>>> = repository.getSearchNewsList("sports")
         flow.collect {
             assert(it.status == Result.SUCCESS)
+            assert(it.data?.isNotEmpty() == true)
         }
     }
 
     @Test
-    fun getSearchNewsListFailure() = runBlocking {
-        val retroResponseMock = mock<Response<HackerNewsApi>>()
-        whenever(networkApi.getSearchResult(any()).execute()).thenReturn(retroResponseMock)
+    fun getSearchNewsListFailure() = mainCoroutineRule.runTest {
+        val retroResponseMock = mockk<Response<HackerNewsApi>>()
+        every {  networkApi.getSearchResult(any()).execute() } returns retroResponseMock
         val response = networkApi.getSearchResult("sports").execute()
-        whenever(response.isSuccessful).thenReturn(false)
+        every { response.isSuccessful } returns false
         val flow: Flow<Result<List<HackerNews>>> = repository.getSearchNewsList("sports")
         flow.collect {
             assert(it.status == Result.ERROR)
         }
+    }
+
+    @Test(expected = IOException::class)
+    fun getSearchNewsListException() = mainCoroutineRule.runTest {
+        every {  networkApi.getSearchResult(any()).execute() } returns throwException()
+        val flow: Flow<Result<List<HackerNews>>> = repository.getSearchNewsList("sports")
+        flow.collect {
+            assert(it.status == Result.ERROR)
+            assert(it.error?.message == "Job cancelled")
+        }
+    }
+
+    private fun throwException(): Response<HackerNewsApi> {
+        throw IOException("Job cancelled")
     }
 }
