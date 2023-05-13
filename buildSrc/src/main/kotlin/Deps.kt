@@ -19,6 +19,7 @@ object Deps {
     const val okHttpInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.OkHttp}"
 
     const val lottie = "com.airbnb.android:lottie:${Versions.Lottie}"
+    const val lottieCompose = "com.airbnb.android:lottie-compose:${Versions.Lottie}"
     const val koin = "io.insert-koin:koin-android:${Versions.Koin}"
 
     //Testing

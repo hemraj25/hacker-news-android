@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".presentation.home.HackerNewsHomeActivity">
 
@@ -33,24 +32,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"/>
 
-    <FrameLayout
+    <androidx.compose.ui.platform.ComposeView
+        android:id = "@+id/composeView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvHackerNews"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/typingAnimationView"
-            android:layout_width="250dp"
-            android:layout_height="210dp"
-            android:layout_marginTop="80dp"
-            android:layout_gravity="center_horizontal"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="smoothymon_typing.json"
-            app:lottie_loop="true" />
-    </FrameLayout>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

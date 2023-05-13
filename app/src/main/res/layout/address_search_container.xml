@@ -8,8 +8,8 @@
     android:paddingEnd="10dp">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:contentDescription="@string/home_screen_title"
         android:src="@drawable/ic_search" />
 

@@ -2,12 +2,11 @@ package com.hemraj.hackernews.presentation.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.compose.runtime.Composable
 import com.hemraj.hackernews.R
 import com.hemraj.hackernews.Result
 import com.hemraj.hackernews.databinding.ActivityHomeBinding
+import com.hemraj.hackernews.domain.HackerNews
 import com.hemraj.hackernews.presentation.WebViewActivity
 import com.hemraj.hackernews.util.*
 import org.koin.android.ext.android.inject
@@ -20,24 +19,27 @@ class HackerNewsHomeActivity : AppCompatActivity() {
 
     private val viewModel by inject<HackerNewsViewModel>()
 
-    private val hackerNewsAdapter = HackerNewsAdapter {
-        it?.url?.let { url ->
-            if (url.isValidUrl()) {
-                startActivity(WebViewActivity.createIntent(this, url))
-            } else {
-                "Invalid url $url".showToast(this)
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.composeView.setContent {
+            RenderHomeScreen()
+        }
         initToolbar()
         initViewModel()
         initView()
-        initRecyclerView()
+    }
+
+    @Composable
+    fun RenderHomeScreen() {
+        if (viewModel.showTypingAnimation.value) {
+            PlayLottieAnimation()
+        } else {
+            ShowNewsList(data = viewModel.newsList) {
+                onNewsClick(it)
+            }
+        }
     }
 
     private fun initToolbar() {
@@ -48,29 +50,33 @@ class HackerNewsHomeActivity : AppCompatActivity() {
 
     private fun initView() {
         binding.searchView.searchEt.afterTextChange {
-            if (it.length > 2) {
-                viewModel.getSearchResult(it)
-                binding.typingAnimationView.stopAnimation()
-            } else {
-                hackerNewsAdapter.clearData()
-                binding.typingAnimationView.startAnimation()
-            }
+            viewModel.getSearchResult(it)
+        }
+    }
+
+    private fun onNewsClick(hackerNews: HackerNews) {
+        if (hackerNews.url.isValidUrl()) {
+            startActivity(WebViewActivity.createIntent(this, hackerNews.url))
+        } else {
+            "Invalid url ${hackerNews.url}".showToast(this)
         }
     }
 
     private fun initViewModel() {
-        viewModel.searchResultLiveData.observe(this, Observer {
+        viewModel.observeSearchQueryInput()
+        viewModel.searchResultLiveData.observe(this) {
             when (it.status) {
 
                 Result.LOADING -> {
-                    //No op
+                    viewModel.showTypingAnimation.value = true
                 }
 
                 Result.SUCCESS -> {
                     it.data?.let { newsList ->
                         log(TAG, "Success: itemCount-> ${newsList.size}")
-                        hackerNewsAdapter.setData(newsList)
+                        viewModel.newsList = it.data
                     }
+                    viewModel.showTypingAnimation.value = false
                 }
 
                 Result.ERROR -> {
@@ -78,11 +84,6 @@ class HackerNewsHomeActivity : AppCompatActivity() {
                 }
 
             }
-        })
-    }
-
-    private fun initRecyclerView() {
-        binding.rvHackerNews.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        binding.rvHackerNews.adapter = hackerNewsAdapter
+        }
     }
 }

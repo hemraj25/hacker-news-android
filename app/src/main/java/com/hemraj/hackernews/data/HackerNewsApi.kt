@@ -1,7 +1,9 @@
 package com.hemraj.hackernews.data
 
+import androidx.annotation.Keep
 import com.hemraj.hackernews.domain.HackerNews
 
+@Keep
 class HackerNewsApi(
     val exhaustiveNbHits: Boolean,
     val hits: List<Hit>,
@@ -15,61 +17,49 @@ class HackerNewsApi(
 ) {
     fun toDomain(): List<HackerNews> {
         val hackerNewsList = mutableListOf<HackerNews>()
-        hits.forEach {
+        hits.filter {
+            it.title.isNullOrEmpty().not() ||  it.story_title.isNullOrEmpty().not()
+        }.map {
             hackerNewsList.add(
                 HackerNews(
-                    it.title ?: "Title",
-                    it.story_text ?: "",
+                    getTitle(it),
+                    it.comment_text ?: "",
                     it.author ?: "",
-                    it.url ?: ""
+                    it.url ?: it.story_url?: ""
                 )
             )
         }
         return hackerNewsList
     }
+
+    private fun getTitle(hit: Hit): String {
+        return if (hit.title.isNullOrEmpty().not())
+            hit.title!!
+        else if (hit.story_title.isNullOrEmpty().not()) {
+            hit.story_title!!
+        } else {
+            "Title"
+        }
+    }
 }
 
-
+@Keep
 data class Hit(
-    val _highlightResult: HighlightResult,
-    val _tags: List<String>,
+    val _tags: List<String>?,
     val author: String?,
-    val comment_text: Any,
-    val created_at: String,
+    val comment_text: String?,
+    val created_at: String?,
     val created_at_i: Int,
     val num_comments: Int,
-    val objectID: String,
-    val parent_id: Any,
+    val objectID: String?,
+    val parent_id: Int,
     val points: Int,
     val relevancy_score: Int,
-    val story_id: Any,
+    val story_id: Int,
     val story_text: String?,
     val story_title: String?,
-    val story_url: Any,
+    val story_url: String?,
     val title: String?,
     val url: String?
 )
 
-data class HighlightResult(
-    val author: Author,
-    val title: Title,
-    val url: Url
-)
-
-data class Title(
-    val matchLevel: String,
-    val matchedWords: List<Any>,
-    val value: String
-)
-
-data class Url(
-    val matchLevel: String,
-    val matchedWords: List<Any>,
-    val value: String
-)
-
-data class Author(
-    val matchLevel: String,
-    val matchedWords: List<Any>,
-    val value: String
-)
