@@ -1,3 +1,5 @@
+import java.util.*
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -22,6 +24,18 @@ android {
         versionName = Config.versionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        create("release") {
+            val keystorePropertiesFile = rootProject.file("keystore.properties")
+            val keystoreProperties = Properties().apply {
+                load(keystorePropertiesFile.inputStream())
+            }
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword =  keystoreProperties["keyPassword"] as String
+            storeFile =  rootProject.file(keystoreProperties["storeFile"] as String)
+            storePassword =  keystoreProperties["storePassword"] as String
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -32,6 +46,7 @@ android {
                     "proguard-rules.pro"
                 )
             )
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             enableUnitTestCoverage = true
@@ -71,6 +86,8 @@ dependencies {
     implementation(Deps.okHttpInterceptor)
 
     implementation(Deps.lottie)
+    //https://github.com/airbnb/lottie/blob/master/android-compose.md
+    implementation(Deps.lottieCompose)
     implementation(Deps.koin)
 
     //********************* Testing *************************************
