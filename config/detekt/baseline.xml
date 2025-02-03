@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>FunctionNaming:HackerNewsHomeActivity.kt$HackerNewsHomeActivity$@Composable fun RenderHomeScreen()</ID>
+    <ID>FunctionNaming:HomeScreenCompose.kt$@Composable fun HackerNewsItemView(hackerNews: HackerNews, onNewsClick: (HackerNews) -&gt; Unit)</ID>
+    <ID>FunctionNaming:HomeScreenCompose.kt$@Composable fun PlayLottieAnimation()</ID>
+    <ID>FunctionNaming:HomeScreenCompose.kt$@Composable fun ShowNewsList(data: List&lt;HackerNews&gt;, onNewsClick: (HackerNews) -&gt; Unit)</ID>
+    <ID>FunctionNaming:HomeScreenCompose.kt$@Preview(showSystemUi = true, showBackground = true) @Composable fun Preview()</ID>
+    <ID>StringLiteralDuplication:HomeScreenCompose.kt$"Mohit"</ID>
+    <ID>StringLiteralDuplication:HomeScreenCompose.kt$"News Hacked"</ID>
+    <ID>StringLiteralDuplication:HomeScreenCompose.kt$"www.test.com"</ID>
+    <ID>TooGenericExceptionCaught:HackerNewsDataRepository.kt$HackerNewsDataRepository$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:HackerNewsViewModel.kt$HackerNewsViewModel$ioException: Exception</ID>
+    <ID>VariableMinLength:AppDispatchers.kt$DispatcherProvider$val IO: CoroutineDispatcher</ID>
+    <ID>VariableNaming:AppDispatchers.kt$DispatcherProvider$val Default: CoroutineDispatcher</ID>
+    <ID>VariableNaming:AppDispatchers.kt$DispatcherProvider$val IO: CoroutineDispatcher</ID>
+    <ID>VariableNaming:AppDispatchers.kt$DispatcherProvider$val Main: CoroutineDispatcher</ID>
+    <ID>VariableNaming:HackerNewsHomeActivity.kt$HackerNewsHomeActivity$private val TAG = "HackerNewsHomeActivity"</ID>
+    <ID>VariableNaming:HackerNewsViewModel.kt$HackerNewsViewModel$private val TAG = HackerNewsViewModel::class.java.canonicalName</ID>
+    <ID>WildcardImport:HackerNewsHomeActivity.kt$import com.hemraj.hackernews.util.*</ID>
+    <ID>WildcardImport:HackerNewsViewModel.kt$import androidx.lifecycle.*</ID>
+    <ID>WildcardImport:HomeScreenCompose.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:HomeScreenCompose.kt$import androidx.compose.material3.*</ID>
+    <ID>WildcardImport:HomeScreenCompose.kt$import com.airbnb.lottie.compose.*</ID>
+    <ID>WildcardImport:WebViewActivity.kt$import android.webkit.*</ID>
+  </CurrentIssues>
+</SmellBaseline>

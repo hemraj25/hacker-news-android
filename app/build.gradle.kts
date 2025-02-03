@@ -1,8 +1,8 @@
 import java.util.*
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 apply {
@@ -13,15 +13,20 @@ apply {
     from("$rootDir/jacoco.gradle")
 }
 
+apply {
+    from("$rootDir/detekt.gradle")
+}
+
 android {
     namespace = "com.hemraj.hackernews"
-    compileSdk = Config.compileSdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
+
     defaultConfig {
         applicationId = "com.hemraj.hackernews"
-        minSdk = Config.minSdk
-        targetSdk = Config.targetSdk
-        versionCode = Config.versionCode
-        versionName = Config.versionName
+        minSdk =  libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = 1
+        versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -36,6 +41,7 @@ android {
             storePassword =  keystoreProperties["storePassword"] as String
         }
     }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -52,66 +58,72 @@ android {
             enableUnitTestCoverage = true
         }
     }
+
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
-    compileOptions {
-        sourceCompatibility = Config.sourceCompatibility
-        targetCompatibility = Config.targetCompatibility
+
+    kotlin {
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+
     buildFeatures {
         viewBinding = true
+        buildConfig = true
         compose = true
     }
+
     composeOptions {
         // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = libs.versions.composeKotlinCompiler.get()
     }
 }
 
 
 dependencies {
-    implementation(Deps.appCompat)
-    implementation(Deps.coreKtx)
-    implementation(Deps.recyclerview)
-    implementation(Deps.lifecycleViewModelKtx)
-    implementation(Deps.lifecycleLiveDataKtx)
 
-    implementation(Deps.retrofit)
-    implementation(Deps.retrofitConverter)
-    implementation(Deps.okHttp)
-    implementation(Deps.okHttpInterceptor)
-
-    implementation(Deps.lottie)
+    implementation(libs.appCompat)
+    implementation(libs.googleMaterial)
+    implementation(libs.coreKtx)
+    implementation(libs.gson)
+    implementation(libs.recyclerview)
+    implementation(libs.lifecycleViewModelKtx)
+    implementation(libs.lifecycleLiveDataKtx)
+    implementation(libs.lottie)
     //https://github.com/airbnb/lottie/blob/master/android-compose.md
-    implementation(Deps.lottieCompose)
-    implementation(Deps.koin)
+    implementation(libs.lottieCompose)
+    implementation(libs.koin)
+
+    //********************* Networking *************************************
+    implementation(libs.retrofit)
+    implementation(libs.retrofitConverter)
+    implementation(libs.okHttp)
+    implementation(libs.okHttpInterceptor)
 
     //********************* Testing *************************************
-    testImplementation(Deps.jUnit)
-    testImplementation(Deps.mockk)
-    testImplementation(Deps.coreTesting)
-    testImplementation(Deps.coroutineTest)
-    androidTestImplementation(Deps.jUnitExt)
-    androidTestImplementation(Deps.espressoCore)
-
+    testImplementation(libs.jUnit)
+    androidTestImplementation(libs.jUnitExt)
+    androidTestImplementation(libs.espressoCore)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coreTesting)
+    testImplementation(libs.coroutineTest)
 
     //********************* Jetpack Compose *************************************
-    val composeBom = platform("androidx.compose:compose-bom:2023.03.00")
+    val composeBom = platform(libs.composeBom)
     implementation(composeBom)
+    testImplementation(composeBom)
     androidTestImplementation(composeBom)
 
     // Material Design 3
-    implementation("androidx.compose.material3:material3")
+    implementation(libs.material3)
 
     // Android Studio Preview support
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation(libs.uiToolingPreview)
+    debugImplementation(libs.uiTooling)
 
     // UI Tests
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    androidTestImplementation(libs.uiTestJunit4)
+    debugImplementation(libs.uiTestManifest)
 }

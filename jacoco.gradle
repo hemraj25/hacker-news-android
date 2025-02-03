@@ -1,15 +1,15 @@
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = "${Versions.Jacoco}"
+    toolVersion = "0.8.12"
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     jacoco.includeNoLocationClasses = true
-    jacoco.excludes = ['jdk.internal.*'] // see related issue https://github.com/gradle/gradle/issues/5184#issuecomment-457865951
+    jacoco.excludes = ['jdk.internal.*']
+    // see related issue https://github.com/gradle/gradle/issues/5184#issuecomment-457865951
 }
 
-//https://copyprogramming.com/howto/jacoco-how-to-correctly-exclude-package
 ext.excludes = [
         '**/R.class',
         '**/R$*.class',
@@ -30,12 +30,7 @@ ext.excludes = [
         '**/*ViewHolder*.*',
         '**/*Decorator*.*',
         '**/*BottomSheet*.*',
-        '**/*Service*.*',
-        '**/databinding/**',
-        '**/di/**', //Excluding folders
-        '**/*$Lambda$*.*',
-        '**/*Companion*.*',
-        '**/*Extensions*.*'
+        '**/*Service*.*'
 ]
 
 project.afterEvaluate {
@@ -58,7 +53,8 @@ def createVariantCoverage(variant) {
     def testTaskName = "test${variantNameCaps}UnitTest"
 
     //./gradlew testDebugUnitTestCoverageReport
-    task "test${variantNameCaps}UnitTestCoverageReport" (type:JacocoReport, dependsOn: "$testTaskName") {
+    tasks.register("test${variantNameCaps}UnitTestCoverageReport", JacocoReport) {
+        dependsOn "$testTaskName"
         group = "Reporting"
         description = "Generate Jacoco coverage reports on the ${variantNameCaps} build."
 
@@ -77,14 +73,15 @@ def createVariantCoverage(variant) {
         getSourceDirectories().setFrom(files(sourceDirs))
         getExecutionData().setFrom(files(
                 "${project.buildDir}/outputs/unit_test_code_coverage/${variantName}UnitTest/${testTaskName}.exec"))
-        reports {
-            xml.enabled = true
-            html.enabled = true
-            csv.enabled = true
-        }
 
-        doLast() {
-            print "file://${project.buildDir}/reports/jacoco/test${variantNameCaps}UnitTestCoverageReport/html/index.html"
+        reports {
+            def rootProjectBuildDir = rootProject.getLayout().buildDirectory.get().asFile
+            xml.required = true
+            html.required = true
+
+            def task = "test${variantNameCaps}UnitTestCoverageReport"
+            logger.quiet("jacoco html report: $rootProjectBuildDir/reports/jacoco/$task/html/index.html")
+            logger.quiet("jacoco xml report: $rootProjectBuildDir/reports/jacoco/$task/${task}.xml")
         }
     }
 }

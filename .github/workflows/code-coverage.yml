@@ -1,0 +1,47 @@
+name: Code Coverage
+on:
+    workflow_dispatch:
+    pull_request:
+        branches:
+            - master
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    # JOB to run android tests and generate code coverage report
+    runAndroidTests:
+        name: Run Android Tests
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+            with:
+              fetch-depth: 1
+
+          - name: set up JDK 17
+            uses: actions/setup-java@v4
+            with:
+              java-version: '17'
+              distribution: 'temurin'
+              cache: 'gradle'
+
+          #https://github.com/android-actions/setup-android
+          - name: Setup Android SDK
+            uses: android-actions/setup-android@v2
+
+          - name: Generate Unit Test Coverage Report
+            run: |
+                ./gradlew testDebugUnitTestCoverageReport
+
+          - name: Add coverage to PR
+            if: ${{ github.event_name != 'workflow_dispatch' }}
+            id: jacoco-report
+            uses: madrapps/jacoco-report@v1.6.1
+            with:
+                paths: ${{ github.workspace }}/app/build/reports/jacoco/testDebugUnitTestCoverageReport/testDebugUnitTestCoverageReport.xml
+                token: ${{ secrets.GH_TOKEN }}
+                min-coverage-overall: 0
+                min-coverage-changed-files: 0
+                title: Code Coverage

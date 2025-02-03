@@ -10,7 +10,7 @@ pluginManagement {
 
 //https://docs.gradle.org/7.4.2/userguide/dependency_management.html#sub:centralized-repository-declaration
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
     repositories {
         google()
         mavenCentral()
