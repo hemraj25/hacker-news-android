@@ -1,18 +1,11 @@
 name: Code Analysis
 
 on:
-    workflow_dispatch:
-    pull_request:
-    push:
-      branches:
-            - master
-
-        # Explicitly specify event type, for Build step to run only on merge
-        # By default workflows for pull_request event trigger on [opened, synchronize, reopened]
-        # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
-        types:
-            - opened
-            - synchronize
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
