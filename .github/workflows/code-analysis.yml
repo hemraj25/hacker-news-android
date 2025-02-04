@@ -35,9 +35,12 @@ jobs:
 
           # https://github.com/marketplace/actions/run-detekt-with-reviewdog
           - name: detekt
-            uses: hemraj25/Detekt-Action@v1.0.0
+            uses: hemraj25/Detekt-Action@v1.0.1
             with:
+                run: echo "${{ secrets.GH_TOKEN }} ${{ secrets.DOCKER_USERNAME }}"
                 github_token: ${{ secrets.GH_TOKEN }}
+                docker_username: ${{ secrets.DOCKER_USERNAME }}
+                docker_token: ${{ secrets.DOCKER_TOKEN }}
                 detekt_config: '${{ github.workspace }}/config/detekt/detekt.yml'
                 detekt_baseline: '${{ github.workspace }}/config/detekt/baseline.xml'
                 reviewdog_reporter: github-pr-review
