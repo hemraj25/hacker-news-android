@@ -35,7 +35,7 @@ jobs:
 
           # https://github.com/marketplace/actions/run-detekt-with-reviewdog
           - name: detekt
-            uses: hemraj25/Detekt-Action@v1.0.2
+            uses: hemraj25/Detekt-Action@v1.0.3
             with:
                 run: echo "${{ secrets.GH_TOKEN }} ${{ secrets.DOCKER_USERNAME }}"
                 github_token: ${{ secrets.GH_TOKEN }}
